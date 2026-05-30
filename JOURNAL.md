@@ -3,6 +3,15 @@
 A running log of progress and decisions for the beauty salon showcase site.
 Newest entries at the top. Each entry: what changed and why.
 
+## 2026-05-30 (header)
+
+- Added `app/components/SiteHeader.vue`: sticky header with a text logo
+  ("Luxury Beauty" in the heading font, primary rose + ink colours) and a
+  circular profile icon button (inline SVG person silhouette, `aria-label`
+  for screen readers). Header uses `position: sticky; top: 0; z-index: 100`
+  so it stays visible while scrolling. All sizes fluid via `clamp()`; colours
+  from `:root` tokens only. Placed before `<main>` in `index.vue`.
+
 ## 2026-05-30 (footer)
 
 - Added `app/components/SiteFooter.vue`: a dark footer (`--color-ink` background)

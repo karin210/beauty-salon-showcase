@@ -3,6 +3,16 @@
 A running log of progress and decisions for the beauty salon showcase site.
 Newest entries at the top. Each entry: what changed and why.
 
+## 2026-05-30 (footer)
+
+- Added `app/components/SiteFooter.vue`: a dark footer (`--color-ink` background)
+  with salon name, email (`<a href="mailto:…">`), phone (`<a href="tel:…">`), and
+  a Morelia address inside a semantic `<address>` element. Copyright year is
+  computed at runtime. Layout is a flex row that wraps on small screens. All type
+  sizes use `clamp()`; all colors reference `:root` tokens. Placed after `<main>`
+  in `index.vue` so it sits outside the landmark and doesn't pollute the page's
+  main content region.
+
 ## 2026-05-30
 
 - Added prev/next buttons to the services carousel. Buttons sit below the track,

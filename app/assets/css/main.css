@@ -1,0 +1,53 @@
+:root {
+  /* Brand palette */
+  --color-primary: #b76e79; /* dusty rose */
+  --color-primary-dark: #8f4f59;
+  --color-accent: #d9b08c; /* warm sand */
+
+  /* Neutrals */
+  --color-ink: #2b2024; /* near-black with a warm tint */
+  --color-surface: #ffffff;
+  --color-surface-muted: #f7f1ee;
+
+  /* On-image text */
+  --color-on-dark: #ffffff;
+  --color-overlay: rgba(43, 32, 36, 0.55);
+
+  /* Focus ring */
+  --color-focus: #ffd166;
+
+  /* Typography scale (fluid) */
+  --font-body: "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-heading: Georgia, "Times New Roman", serif;
+
+  /* Spacing scale (fluid) */
+  --space-sm: clamp(0.75rem, 2vw, 1rem);
+  --space-md: clamp(1.25rem, 4vw, 2rem);
+  --space-lg: clamp(2rem, 6vw, 4rem);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+body {
+  box-sizing: border-box;
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--color-ink);
+  background-color: var(--color-surface);
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-heading);
+  line-height: 1.15;
+}

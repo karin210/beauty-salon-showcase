@@ -5,6 +5,38 @@ Newest entries at the top. Each entry: what changed and why.
 
 ## 2026-05-30
 
+- Added prev/next buttons to the services carousel. Buttons sit below the track,
+  right-aligned, in a `.carousel__controls` flex row — no absolute positioning
+  needed. Scroll step is computed from the live positions of the first two `<li>`
+  elements (`getBoundingClientRect` diff), so it automatically accounts for any
+  card width + gap without hardcoding pixel values. Applied the semicolon
+  convention to all script-block statements.
+
+- Rebuilt the services section as a tabbed interface (`app/components/ServicesSection.vue`).
+  - Each of the 5 categories (Cabello, Pestañas y cejas, Depilación, Maquillaje,
+    Manos y pies) is now a tab. Tab nav is horizontally scrollable on mobile.
+  - Full ARIA tab pattern: `role="tablist"`, `role="tab"`, `role="tabpanel"`,
+    `aria-selected`, `aria-controls`, `aria-labelledby`. Keyboard nav supports
+    ArrowLeft/Right, Home, End with focus management per the ARIA APG.
+  - Each panel has a headline + blurb on the left and a representative image
+    placeholder on the right — the image is hidden on small screens via a
+    `@media (min-width: 60rem)` gate (no absolutely-positioned elements).
+  - Below the text row: a CSS scroll-snap carousel of 7 placeholder cards (3:4
+    aspect image + service name). Card width uses `clamp(10rem, 28vw, 14rem)`,
+    showing ~2 cards on mobile and ~5 on desktop so off-screen content is hinted.
+
+- Added the services section (`app/components/ServicesSection.vue`), rendered
+  below the hero on the home page.
+  - Categories: Cabello, Pestañas y cejas, Depilación, Maquillaje, Manos y pies.
+    Merged the requested "Pestañas" into "Pestañas y cejas" since brow design
+    almost always sells alongside lash work — reads more complete without clutter.
+  - Data-driven: a typed `Service[]` array (English ids/keys, Spanish copy)
+    rendered into a responsive `auto-fit minmax(16rem, 1fr)` card grid.
+  - Semantic markup: `<section>` with `aria-labelledby`, a `<ul>` of `<li>`
+    wrapping each `<article>` card, and a nested `<ul>` of example treatments.
+  - Reuses `:root` tokens (rose accent border, muted surface background); fluid
+    type/spacing throughout, no raw hex. Anchor id `#servicios` for nav linking.
+
 - Added the hero section as the site's first feature.
   - New `app/components/HeroSection.vue`: full-bleed `public/hair-wash-1.jpg`
     background with an "Agendar cita" CTA. The background and the dark overlay

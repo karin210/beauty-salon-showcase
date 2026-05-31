@@ -6,7 +6,7 @@
         <span class="site-header__logo-word site-header__logo-word--bold">Beauty</span>
       </a>
 
-      <button class="site-header__profile" type="button" aria-label="Perfil de usuario">
+      <NuxtLink to="/profile" class="site-header__profile" aria-label="Ver perfil de usuario">
         <svg
           class="site-header__profile-icon"
           xmlns="http://www.w3.org/2000/svg"
@@ -22,7 +22,7 @@
           <circle cx="12" cy="8" r="4" />
           <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
         </svg>
-      </button>
+      </NuxtLink>
     </div>
   </header>
 </template>
@@ -85,6 +85,7 @@
   background-color: var(--color-surface-muted);
   color: var(--color-ink);
   cursor: pointer;
+  text-decoration: none;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 

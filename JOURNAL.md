@@ -3,6 +3,22 @@
 A running log of progress and decisions for the beauty salon showcase site.
 Newest entries at the top. Each entry: what changed and why.
 
+## 2026-05-30 (profile page)
+
+- Added `app/pages/profile.vue`: a dedicated `/profile` route showing fake user data
+  (Valentina Morales — name, phone, email), last service with date, "Ver historial de
+  estilos" section listing 4 past visits, and "Recordatorios" section with 3 reminder
+  cards (retoque de raíces, hidratación, recorte de puntas). Reminder cards use a
+  `data-urgency` attribute to drive left-border and badge colour via CSS attribute
+  selectors — no inline styles or JS logic. All colours from `:root` tokens; all font
+  sizes via `clamp()`; fully WCAG AA accessible (semantic headings, `aria-labelledby`
+  on every section, keyboard-navigable contact links).
+- Updated `app/components/SiteHeader.vue`: profile `<button>` replaced with
+  `<NuxtLink to="/profile">` so clicking the icon navigates to the profile page.
+  Added `text-decoration: none` to the existing `.site-header__profile` rule.
+- Added `--color-border: rgba(43, 32, 36, 0.15)` utility token to `main.css` for
+  the default (neutral) reminder card border colour.
+
 ## 2026-05-30 (header)
 
 - Added `app/components/SiteHeader.vue`: sticky header with a text logo

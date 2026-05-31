@@ -16,6 +16,9 @@
   /* Focus ring */
   --color-focus: #ffd166;
 
+  /* Utility border */
+  --color-border: rgba(43, 32, 36, 0.15);
+
   /* Typography scale (fluid) */
   --font-body: "Segoe UI", system-ui, -apple-system, sans-serif;
   --font-heading: Georgia, "Times New Roman", serif;

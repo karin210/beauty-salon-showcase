@@ -12,34 +12,39 @@ const CARD_COUNT = 7;
 
 const services: Service[] = [
   {
-    id: 'hair',
-    title: 'Cabello',
-    headline: 'Tu cabello, nuestra pasión',
-    blurb: 'Desde cortes de autor hasta tratamientos de hidratación profunda, nuestras estilistas transforman tu cabello con técnica y dedicación. El look que siempre soñaste está a una visita de distancia.',
+    id: "hair",
+    title: "Cabello",
+    headline: "Tu cabello, nuestra pasión",
+    blurb:
+      "Desde cortes de autor hasta tratamientos de hidratación profunda, nuestras estilistas transforman tu cabello con técnica y dedicación. El look que siempre soñaste está a una visita de distancia.",
   },
   {
-    id: 'lashes-brows',
-    title: 'Pestañas y cejas',
-    headline: 'Una mirada que lo dice todo',
-    blurb: 'Pestañas que alargan y cejas que enmarcan tu rostro. Con extensiones, lifting y diseño personalizado, tus ojos brillan con luz propia sin esfuerzo adicional.',
+    id: "lashes-brows",
+    title: "Pestañas y cejas",
+    headline: "Una mirada que lo dice todo",
+    blurb:
+      "Pestañas que alargan y cejas que enmarcan tu rostro. Con extensiones, lifting y diseño personalizado, tus ojos brillan con luz propia sin esfuerzo adicional.",
   },
   {
-    id: 'waxing',
-    title: 'Depilación',
-    headline: 'Piel suave, sin complicaciones',
-    blurb: 'Depilación facial y corporal con cera de alta calidad para resultados duraderos. Saldrás sintiéndote fresca e impecable, lista para cualquier ocasión.',
+    id: "waxing",
+    title: "Depilación",
+    headline: "Piel suave, sin complicaciones",
+    blurb:
+      "Depilación facial y corporal con cera de alta calidad para resultados duraderos. Saldrás sintiéndote fresca e impecable, lista para cualquier ocasión.",
   },
   {
-    id: 'makeup',
-    title: 'Maquillaje',
-    headline: 'Luce perfecta en cada ocasión',
-    blurb: 'Maquillaje profesional adaptado a tu estilo y al tipo de evento. Desde looks naturales para el día a día hasta propuestas espectaculares para tus momentos más especiales.',
+    id: "makeup",
+    title: "Maquillaje",
+    headline: "Luce perfecta en cada ocasión",
+    blurb:
+      "Maquillaje profesional adaptado a tu estilo y al tipo de evento. Desde looks naturales para el día a día hasta propuestas espectaculares para tus momentos más especiales.",
   },
   {
-    id: 'hands-feet',
-    title: 'Manos y pies',
-    headline: 'Los detalles que te hacen lucir completa',
-    blurb: 'Manicure, pedicure y uñas esculpidas con productos premium. Porque cuidarte de pies a manos es el lujo que mereces cada semana.',
+    id: "hands-feet",
+    title: "Manos y pies",
+    headline: "Los detalles que te hacen lucir completa",
+    blurb:
+      "Manicure, pedicure y uñas esculpidas con productos premium. Porque cuidarte de pies a manos es el lujo que mereces cada semana.",
   },
 ];
 
@@ -62,10 +67,11 @@ function selectTab(id: string): void {
 
 function onTabKeydown(event: KeyboardEvent, index: number): void {
   let next = -1;
-  if (event.key === 'ArrowRight') next = (index + 1) % services.length;
-  else if (event.key === 'ArrowLeft') next = (index - 1 + services.length) % services.length;
-  else if (event.key === 'Home') next = 0;
-  else if (event.key === 'End') next = services.length - 1;
+  if (event.key === "ArrowRight") next = (index + 1) % services.length;
+  else if (event.key === "ArrowLeft")
+    next = (index - 1 + services.length) % services.length;
+  else if (event.key === "Home") next = 0;
+  else if (event.key === "End") next = services.length - 1;
   else return;
 
   event.preventDefault();
@@ -73,16 +79,21 @@ function onTabKeydown(event: KeyboardEvent, index: number): void {
   tabButtons[next]?.focus();
 }
 
-function scrollCarousel(serviceId: string, direction: 'prev' | 'next'): void {
+function scrollCarousel(serviceId: string, direction: "prev" | "next"): void {
   const track = carouselTracks[serviceId];
   if (!track) return;
 
-  const items = track.querySelectorAll<HTMLLIElement>('li');
+  const items = track.querySelectorAll<HTMLLIElement>("li");
   if (items.length < 2) return;
 
   // Compute step as card width + gap from the live positions of the first two items.
-  const step = items[1].getBoundingClientRect().left - items[0].getBoundingClientRect().left;
-  track.scrollBy({ left: direction === 'next' ? step : -step, behavior: 'smooth' });
+  const step =
+    items[1].getBoundingClientRect().left -
+    items[0].getBoundingClientRect().left;
+  track.scrollBy({
+    left: direction === "next" ? step : -step,
+    behavior: "smooth",
+  });
 }
 </script>
 
@@ -99,7 +110,11 @@ function scrollCarousel(serviceId: string, direction: 'prev' | 'next'): void {
         v-for="(service, index) in services"
         :key="service.id"
         :id="`tab-${service.id}`"
-        :ref="(el) => { tabButtons[index] = el as HTMLButtonElement | null; }"
+        :ref="
+          (el) => {
+            tabButtons[index] = el as HTMLButtonElement | null;
+          }
+        "
         role="tab"
         :aria-selected="activeId === service.id"
         :aria-controls="`panel-${service.id}`"
@@ -140,7 +155,11 @@ function scrollCarousel(serviceId: string, direction: 'prev' | 'next'): void {
       >
         <ul
           class="carousel__track"
-          :ref="(el) => { carouselTracks[service.id] = el as HTMLUListElement | null; }"
+          :ref="
+            (el) => {
+              carouselTracks[service.id] = el as HTMLUListElement | null;
+            }
+          "
         >
           <li v-for="n in CARD_COUNT" :key="n" class="carousel__item">
             <article class="service-card">
@@ -163,7 +182,9 @@ function scrollCarousel(serviceId: string, direction: 'prev' | 'next'): void {
                     aria-hidden="true"
                     focusable="false"
                   >
-                    <path d="M3 9H21M7 3V5M17 3V5M6 12H8M11 12H13M16 12H18M6 15H8M11 15H13M16 15H18M6 18H8M11 18H13M16 18H18M6.2 21H17.8C18.9201 21 19.4802 21 19.908 20.782C20.2843 20.5903 20.5903 20.2843 20.782 19.908C21 19.4802 21 18.9201 21 17.8V8.2C21 7.07989 21 6.51984 20.782 6.09202C20.5903 5.71569 20.2843 5.40973 19.908 5.21799C19.4802 5 18.9201 5 17.8 5H6.2C5.0799 5 4.51984 5 4.09202 5.21799C3.71569 5.40973 3.40973 5.71569 3.21799 6.09202C3 6.51984 3 7.07989 3 8.2V17.8C3 18.9201 3 19.4802 3.21799 19.908C3.40973 20.2843 3.71569 20.5903 4.09202 20.782C4.51984 21 5.07989 21 6.2 21Z" />
+                    <path
+                      d="M3 9H21M7 3V5M17 3V5M6 12H8M11 12H13M16 12H18M6 15H8M11 15H13M16 15H18M6 18H8M11 18H13M16 18H18M6.2 21H17.8C18.9201 21 19.4802 21 19.908 20.782C20.2843 20.5903 20.5903 20.2843 20.782 19.908C21 19.4802 21 18.9201 21 17.8V8.2C21 7.07989 21 6.51984 20.782 6.09202C20.5903 5.71569 20.2843 5.40973 19.908 5.21799C19.4802 5 18.9201 5 17.8 5H6.2C5.0799 5 4.51984 5 4.09202 5.21799C3.71569 5.40973 3.40973 5.71569 3.21799 6.09202C3 6.51984 3 7.07989 3 8.2V17.8C3 18.9201 3 19.4802 3.21799 19.908C3.40973 20.2843 3.71569 20.5903 4.09202 20.782C4.51984 21 5.07989 21 6.2 21Z"
+                    />
                   </svg>
                 </button>
               </div>
@@ -250,7 +271,9 @@ function scrollCarousel(serviceId: string, direction: 'prev' | 'next'): void {
   font-weight: 500;
   color: var(--color-ink);
   white-space: nowrap;
-  transition: color 0.15s ease, border-color 0.15s ease;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .tab-nav__button:hover {
@@ -367,7 +390,9 @@ function scrollCarousel(serviceId: string, direction: 'prev' | 'next'): void {
   font-size: 1.5rem;
   line-height: 1;
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .carousel__btn:hover {
@@ -389,7 +414,6 @@ function scrollCarousel(serviceId: string, direction: 'prev' | 'next'): void {
   background-color: var(--color-surface);
   box-shadow: 0 2px 12px rgba(43, 32, 36, 0.08);
 }
-
 
 .service-card__image {
   aspect-ratio: 3 / 4;
@@ -431,12 +455,15 @@ function scrollCarousel(serviceId: string, direction: 'prev' | 'next'): void {
   background-color: var(--color-surface-muted);
   color: var(--color-primary);
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .service-card__book-btn svg {
-  width: 55%;
-  height: 55%;
+  width: 100%;
+  height: 100%;
+  color: var(--color-icon-muted);
 }
 
 .service-card__book-btn:hover {

@@ -3,6 +3,13 @@
 A running log of progress and decisions for the beauty salon showcase site.
 Newest entries at the top. Each entry: what changed and why.
 
+## 2026-05-31 (Pinia state management + Próximas citas)
+
+- Installed `@pinia/nuxt` + `pinia`; registered module in `nuxt.config.ts`.
+- Created `app/stores/bookings.ts`: a Pinia store that holds an array of confirmed bookings (service name, date, time, UUID).
+- Updated `BookingModal.vue` to call `bookingStore.add()` when a time slot is selected, persisting the booking to the store.
+- Added a "Próximas citas" section to `profile.vue` that reads from the store and lists upcoming appointments sorted by date, with an empty-state message when none exist.
+
 ## 2026-05-30 (booking modal)
 
 - Added `app/components/BookingDatePicker.vue`: a pure-CSS calendar grid

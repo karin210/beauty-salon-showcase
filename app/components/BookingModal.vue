@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
+import { useBookingStore } from "~/stores/bookings";
 
 const props = defineProps<{
   modelValue: boolean;
@@ -14,6 +15,7 @@ const step = ref<Step>("date");
 const selectedDate = ref<Date | null>(null);
 const selectedTime = ref<string>("");
 const dialogEl = ref<HTMLDialogElement | null>(null);
+const bookingStore = useBookingStore();
 
 watch(() => props.modelValue, (open) => {
   if (open) {
@@ -38,6 +40,9 @@ function onDateSelect(date: Date): void {
 function onTimeSelect(time: string): void {
   selectedTime.value = time;
   step.value = "confirm";
+  if (selectedDate.value) {
+    bookingStore.add(props.serviceName, selectedDate.value, time);
+  }
   setTimeout(close, 2000);
 }
 

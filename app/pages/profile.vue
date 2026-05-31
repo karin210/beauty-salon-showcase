@@ -1,4 +1,27 @@
 <script setup lang="ts">
+import { computed } from "vue";
+import { useBookingStore } from "~/stores/bookings";
+
+const bookingStore = useBookingStore();
+
+const DAY_NAMES = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+const MONTH_NAMES = [
+  "enero", "febrero", "marzo", "abril", "mayo", "junio",
+  "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
+];
+
+function formatBookingDate(d: Date): string {
+  return `${DAY_NAMES[d.getDay()]}, ${d.getDate()} de ${MONTH_NAMES[d.getMonth()]} de ${d.getFullYear()}`;
+}
+
+function isoDate(d: Date): string {
+  return d.toISOString().slice(0, 10);
+}
+
+const upcomingBookings = computed(() =>
+  [...bookingStore.bookings].sort((a, b) => a.date.getTime() - b.date.getTime())
+);
+
 type Urgency = "soon" | "upcoming" | "later";
 
 interface ServiceEntry {
@@ -100,6 +123,28 @@ const urgencyLabel: Record<Urgency, string> = {
             </li>
           </ul>
         </div>
+      </section>
+
+      <section class="profile-section" aria-labelledby="upcoming-heading">
+        <h2 id="upcoming-heading" class="profile-section__heading">Próximas citas</h2>
+        <p v-if="upcomingBookings.length === 0" class="upcoming-empty">
+          No tienes citas agendadas. ¡Reserva un servicio desde la página principal!
+        </p>
+        <ul v-else class="upcoming-list">
+          <li
+            v-for="booking in upcomingBookings"
+            :key="booking.id"
+            class="upcoming-card"
+          >
+            <span class="upcoming-card__service">{{ booking.serviceName }}</span>
+            <div class="upcoming-card__meta">
+              <time class="upcoming-card__date" :datetime="isoDate(booking.date)">
+                {{ formatBookingDate(booking.date) }}
+              </time>
+              <span class="upcoming-card__time">{{ booking.time }}</span>
+            </div>
+          </li>
+        </ul>
       </section>
 
       <section class="profile-section" aria-labelledby="last-service-heading">
@@ -434,5 +479,66 @@ const urgencyLabel: Record<Urgency, string> = {
 
 .reminder-card__label {
   font-weight: 600;
+}
+
+/* ==========================================
+   Próximas citas
+   ========================================== */
+
+.upcoming-empty {
+  font-size: clamp(0.82rem, 2vw, 0.92rem);
+  color: var(--color-ink);
+  margin: 0;
+  opacity: 0.7;
+}
+
+.upcoming-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.upcoming-card {
+  background-color: var(--color-surface-muted);
+  border-left: 4px solid var(--color-primary);
+  border-radius: 0 0.5rem 0.5rem 0;
+  padding: var(--space-sm) var(--space-md);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.4rem;
+}
+
+.upcoming-card__service {
+  font-size: clamp(0.88rem, 2.2vw, 1rem);
+  font-weight: 600;
+  color: var(--color-ink);
+  width: 100%;
+}
+
+.upcoming-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.upcoming-card__date {
+  font-size: clamp(0.78rem, 1.8vw, 0.88rem);
+  color: var(--color-primary-dark);
+  text-transform: capitalize;
+}
+
+.upcoming-card__time {
+  font-size: clamp(0.78rem, 1.8vw, 0.88rem);
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  background-color: var(--color-surface);
+  border-radius: 2em;
+  padding: 0.15em 0.7em;
 }
 </style>

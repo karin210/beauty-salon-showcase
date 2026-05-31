@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from "vue";
 
 interface Service {
   id: string;
@@ -44,6 +44,13 @@ const services: Service[] = [
 ];
 
 const activeId = ref(services[0].id);
+const bookingOpen = ref(false);
+const bookingService = ref("");
+
+function openBooking(serviceName: string): void {
+  bookingService.value = serviceName;
+  bookingOpen.value = true;
+}
 
 // Plain arrays — only used for imperative DOM calls, no reactivity needed.
 const tabButtons: (HTMLButtonElement | null)[] = [];
@@ -136,9 +143,30 @@ function scrollCarousel(serviceId: string, direction: 'prev' | 'next'): void {
           :ref="(el) => { carouselTracks[service.id] = el as HTMLUListElement | null; }"
         >
           <li v-for="n in CARD_COUNT" :key="n" class="carousel__item">
-            <article class="service-card" tabindex="0">
+            <article class="service-card">
               <div class="service-card__image" aria-hidden="true"></div>
-              <p class="service-card__name">Nombre del servicio</p>
+              <div class="service-card__footer">
+                <p class="service-card__name">Nombre del servicio</p>
+                <button
+                  type="button"
+                  class="service-card__book-btn"
+                  :aria-label="`Agendar ${service.title}`"
+                  @click="openBooking(service.title)"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <path d="M3 9H21M7 3V5M17 3V5M6 12H8M11 12H13M16 12H18M6 15H8M11 15H13M16 15H18M6 18H8M11 18H13M16 18H18M6.2 21H17.8C18.9201 21 19.4802 21 19.908 20.782C20.2843 20.5903 20.5903 20.2843 20.782 19.908C21 19.4802 21 18.9201 21 17.8V8.2C21 7.07989 21 6.51984 20.782 6.09202C20.5903 5.71569 20.2843 5.40973 19.908 5.21799C19.4802 5 18.9201 5 17.8 5H6.2C5.0799 5 4.51984 5 4.09202 5.21799C3.71569 5.40973 3.40973 5.71569 3.21799 6.09202C3 6.51984 3 7.07989 3 8.2V17.8C3 18.9201 3 19.4802 3.21799 19.908C3.40973 20.2843 3.71569 20.5903 4.09202 20.782C4.51984 21 5.07989 21 6.2 21Z" />
+                  </svg>
+                </button>
+              </div>
             </article>
           </li>
         </ul>
@@ -163,6 +191,8 @@ function scrollCarousel(serviceId: string, direction: 'prev' | 'next'): void {
         </div>
       </div>
     </div>
+
+    <BookingModal v-model="bookingOpen" :service-name="bookingService" />
   </section>
 </template>
 
@@ -358,13 +388,8 @@ function scrollCarousel(serviceId: string, direction: 'prev' | 'next'): void {
   overflow: hidden;
   background-color: var(--color-surface);
   box-shadow: 0 2px 12px rgba(43, 32, 36, 0.08);
-  cursor: default;
 }
 
-.service-card:focus-visible {
-  outline: 3px solid var(--color-focus);
-  outline-offset: 2px;
-}
 
 .service-card__image {
   aspect-ratio: 3 / 4;
@@ -378,11 +403,49 @@ function scrollCarousel(serviceId: string, direction: 'prev' | 'next'): void {
   );
 }
 
+.service-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.6rem 0.75rem;
+}
+
 .service-card__name {
   margin: 0;
-  padding: 0.75rem;
   font-size: clamp(0.85rem, 2vw, 0.95rem);
   font-weight: 500;
   color: var(--color-ink);
+  min-width: 0;
+}
+
+.service-card__book-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(1.9rem, 5vw, 2.2rem);
+  height: clamp(1.9rem, 5vw, 2.2rem);
+  border: none;
+  border-radius: 50%;
+  background-color: var(--color-surface-muted);
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.service-card__book-btn svg {
+  width: 55%;
+  height: 55%;
+}
+
+.service-card__book-btn:hover {
+  background-color: var(--color-primary);
+  color: var(--color-on-dark);
+}
+
+.service-card__book-btn:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
 }
 </style>

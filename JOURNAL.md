@@ -3,6 +3,27 @@
 A running log of progress and decisions for the beauty salon showcase site.
 Newest entries at the top. Each entry: what changed and why.
 
+## 2026-05-30 (booking modal)
+
+- Added `app/components/BookingDatePicker.vue`: a pure-CSS calendar grid
+  (Monday-first, Spanish month/day labels) that emits a `select` event with
+  the chosen `Date`. Past dates are disabled. Month navigation via prev/next
+  buttons.
+- Added `app/components/BookingTimePicker.vue`: a 3-column grid of time-slot
+  buttons (09:00–18:00, lunch gap at 13:00). Displays the selected date,
+  emits `select` with the time string, and emits `back` to return to the
+  calendar.
+- Added `app/components/BookingModal.vue`: a native `<dialog>` element
+  (showModal / close via Vue watcher) managing three steps — date → time →
+  confirm. Confirm auto-closes after 2 s. Backdrop handled via a non-scoped
+  `::backdrop` rule (scoped attributes don't reach the top layer). Closes on
+  Escape (cancel.prevent → emit), backdrop click, or the × button.
+- Updated `app/components/ServicesSection.vue`: each service card now has a
+  calendar-icon button in its footer row that opens BookingModal for that
+  category. Inlined the SVG from `public/calendar-icon.svg` with
+  `stroke="currentColor"` for token-driven colour control. Lifted
+  `bookingOpen` / `bookingService` refs and `openBooking()` to section scope.
+
 ## 2026-05-30 (profile page)
 
 - Added `app/pages/profile.vue`: a dedicated `/profile` route showing fake user data

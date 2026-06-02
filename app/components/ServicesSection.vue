@@ -2,53 +2,130 @@
 import { ref } from "vue";
 
 interface Service {
+  name: string;
+  image: string | null;
+}
+
+interface ServiceCategory {
   id: string;
   title: string;
   headline: string;
+  image: string;
   blurb: string;
+  services: Service[];
 }
 
-const CARD_COUNT = 7;
-
-const services: Service[] = [
+const categories: ServiceCategory[] = [
   {
     id: "hair",
     title: "Cabello",
     headline: "Tu cabello, nuestra pasión",
+    image: "/hair-main-img.jpg",
     blurb:
       "Desde cortes de autor hasta tratamientos de hidratación profunda, nuestras estilistas transforman tu cabello con técnica y dedicación. El look que siempre soñaste está a una visita de distancia.",
+    services: [
+      { name: "Balayage", image: "/balayage.webp" },
+      { name: "Babylights", image: "/bebylights.webp" },
+      { name: "Baby boomer", image: "/babyboomer.webp" },
+      { name: "Ombré", image: "/ombre.webp" },
+      { name: "Tono base", image: "/tono-base.webp" },
+      { name: "Matiz / baño de color", image: "/matiz-baño-de-color.webp" },
+      { name: "Tinte global", image: "/tinte-global.webp" },
+      { name: "Retoque de canas", image: "/retoque-de-canas.webp" },
+      { name: "Corte dama / Niña", image: "/corte-dama-niña.webp" },
+      { name: "Corte Caballero / Niño", image: "/corte-de-cabello-niño.webp" },
+      {
+        name: "Curly / Alaciado Express",
+        image: "/curly-alaciado-express.webp",
+      },
+      { name: "Falso crecimiento", image: "/falso-crecimiento.webp" },
+    ],
   },
   {
     id: "lashes-brows",
     title: "Pestañas y cejas",
     headline: "Una mirada que lo dice todo",
+    image: "/lashes-main-image.jpg",
     blurb:
       "Pestañas que alargan y cejas que enmarcan tu rostro. Con extensiones, lifting y diseño personalizado, tus ojos brillan con luz propia sin esfuerzo adicional.",
+    services: [
+      {
+        name: "Retoque de extensiones de pestañas",
+        image: "/retoque-de-extensiones-de-pestañas.webp",
+      },
+      {
+        name: "Retiro de extensiones de pestañas",
+        image: "/retiro-de-extensiones-de-pestañas.webp",
+      },
+      { name: "Lash lifting", image: "/lash-lifting.webp" },
+      { name: "Brow lamination", image: "/brow-lamination.webp" },
+    ],
+  },
+  {
+    id: "micropigmentation",
+    title: "Micropigmentación",
+    headline: "Belleza que despierta contigo",
+    image: "/micropigmentation-main-image.jpg",
+    blurb:
+      "Técnicas de micropigmentación para realzar cejas, labios y mirada con resultados naturales y de larga duración. Despierta cada mañana perfecta, sin retoques ni esfuerzo.",
+    services: [
+      { name: "Microshading", image: "/microshading.webp" },
+      { name: "Microblading", image: "/microblanding.webp" },
+      { name: "Punteado de pestañas", image: "/punteado-de-pestañas.webp" },
+      { name: "Baby lips", image: "/baby-lips.webp" },
+      { name: "Delineado de párpados", image: "/delineado-de-parpados.webp" },
+    ],
   },
   {
     id: "waxing",
     title: "Depilación",
     headline: "Piel suave, sin complicaciones",
+    image: "/waxing-main-image.jpg",
     blurb:
       "Depilación facial y corporal con cera de alta calidad para resultados duraderos. Saldrás sintiéndote fresca e impecable, lista para cualquier ocasión.",
+    services: [
+      { name: "Laminado de ceja", image: "/laminado-de-ceja.webp" },
+      { name: "Diseño de ceja", image: "/diseño-de-ceja.webp" },
+      { name: "Depilación", image: "/depilacion.webp" },
+    ],
   },
   {
-    id: "makeup",
-    title: "Maquillaje",
+    id: "makeup-styling",
+    title: "Maquillaje y peinado",
     headline: "Luce perfecta en cada ocasión",
+    image: "/makeup-main-image.webp",
     blurb:
-      "Maquillaje profesional adaptado a tu estilo y al tipo de evento. Desde looks naturales para el día a día hasta propuestas espectaculares para tus momentos más especiales.",
+      "Maquillaje profesional y peinados a la medida de tu estilo y de tu evento. Desde looks naturales para el día a día hasta propuestas espectaculares para tus momentos más especiales.",
+    services: [
+      { name: "Maquillaje de fiesta", image: "/maquillaje-de-fiesta.webp" },
+      { name: "Maquillaje casual", image: "/maquillaje-casual.webp" },
+      { name: "Peinado", image: "/peinado.webp" },
+    ],
   },
   {
     id: "hands-feet",
     title: "Manos y pies",
     headline: "Los detalles que te hacen lucir completa",
+    image: "/hands-feet-main-image.jpg",
     blurb:
       "Manicure, pedicure y uñas esculpidas con productos premium. Porque cuidarte de pies a manos es el lujo que mereces cada semana.",
+    services: [
+      { name: "Mani spa", image: "/mani-spa.webp" },
+      { name: "Mani express", image: "/mani-express.webp" },
+      { name: "Gel semi permanente", image: "/gel-semi-permanente.webp" },
+      {
+        name: "Baño de acrílico o poligel",
+        image: "/baño-de-acrilico-poligel.webp",
+      },
+      { name: "Pedi spa", image: "/padi-spa.webp" },
+      { name: "Baby boomer", image: "/babyboomer.webp" },
+      { name: "Uñas acrílicas", image: "/uñas-acrilicas.webp" },
+      { name: "Uñas esculturales", image: "/uñas-esculturales.webp" },
+    ],
   },
 ];
 
-const activeId = ref(services[0].id);
+const activeId = ref(categories[0].id);
 const bookingOpen = ref(false);
 const bookingService = ref("");
 
@@ -67,15 +144,15 @@ function selectTab(id: string): void {
 
 function onTabKeydown(event: KeyboardEvent, index: number): void {
   let next = -1;
-  if (event.key === "ArrowRight") next = (index + 1) % services.length;
+  if (event.key === "ArrowRight") next = (index + 1) % categories.length;
   else if (event.key === "ArrowLeft")
-    next = (index - 1 + services.length) % services.length;
+    next = (index - 1 + categories.length) % categories.length;
   else if (event.key === "Home") next = 0;
-  else if (event.key === "End") next = services.length - 1;
+  else if (event.key === "End") next = categories.length - 1;
   else return;
 
   event.preventDefault();
-  selectTab(services[next].id);
+  selectTab(categories[next].id);
   tabButtons[next]?.focus();
 }
 
@@ -107,70 +184,88 @@ function scrollCarousel(serviceId: string, direction: "prev" | "next"): void {
     <!-- Tab navigation -->
     <div class="tab-nav" role="tablist" aria-label="Categorías de servicios">
       <button
-        v-for="(service, index) in services"
-        :key="service.id"
-        :id="`tab-${service.id}`"
+        v-for="(category, index) in categories"
+        :key="category.id"
+        :id="`tab-${category.id}`"
         :ref="
           (el) => {
             tabButtons[index] = el as HTMLButtonElement | null;
           }
         "
         role="tab"
-        :aria-selected="activeId === service.id"
-        :aria-controls="`panel-${service.id}`"
-        :tabindex="activeId === service.id ? 0 : -1"
+        :aria-selected="activeId === category.id"
+        :aria-controls="`panel-${category.id}`"
+        :tabindex="activeId === category.id ? 0 : -1"
         class="tab-nav__button"
-        :class="{ 'is-active': activeId === service.id }"
-        @click="selectTab(service.id)"
+        :class="{ 'is-active': activeId === category.id }"
+        @click="selectTab(category.id)"
         @keydown="onTabKeydown($event, index)"
       >
-        {{ service.title }}
+        {{ category.title }}
       </button>
     </div>
 
     <!-- Tab panels -->
     <div
-      v-for="service in services"
-      :key="`panel-${service.id}`"
-      :id="`panel-${service.id}`"
+      v-for="category in categories"
+      :key="`panel-${category.id}`"
+      :id="`panel-${category.id}`"
       role="tabpanel"
-      :aria-labelledby="`tab-${service.id}`"
-      v-show="activeId === service.id"
+      :aria-labelledby="`tab-${category.id}`"
+      v-show="activeId === category.id"
       class="tab-panel"
     >
       <!-- Headline + blurb (left) and representative image (right, large screens only) -->
       <div class="tab-panel__hero">
         <div class="tab-panel__text">
-          <h3 class="tab-panel__headline">{{ service.headline }}</h3>
-          <p class="tab-panel__blurb">{{ service.blurb }}</p>
+          <h3 class="tab-panel__headline">{{ category.headline }}</h3>
+          <p class="tab-panel__blurb">{{ category.blurb }}</p>
         </div>
-        <div class="tab-panel__image" aria-hidden="true"></div>
+        <img
+          :src="category.image"
+          :alt="`${category.title} en nuestro salón`"
+          class="tab-panel__image"
+          loading="lazy"
+          decoding="async"
+        />
       </div>
 
       <!-- Service card carousel -->
       <div
         class="carousel"
         role="region"
-        :aria-label="`Servicios de ${service.title}`"
+        :aria-label="`Servicios de ${category.title}`"
       >
         <ul
           class="carousel__track"
           :ref="
             (el) => {
-              carouselTracks[service.id] = el as HTMLUListElement | null;
+              carouselTracks[category.id] = el as HTMLUListElement | null;
             }
           "
         >
-          <li v-for="n in CARD_COUNT" :key="n" class="carousel__item">
+          <li
+            v-for="service in category.services"
+            :key="service.name"
+            class="carousel__item"
+          >
             <article class="service-card">
-              <div class="service-card__image" aria-hidden="true"></div>
+              <img
+                v-if="service.image"
+                :src="service.image"
+                :alt="service.name"
+                class="service-card__image"
+                loading="lazy"
+                decoding="async"
+              />
+              <div v-else class="service-card__image" aria-hidden="true"></div>
               <div class="service-card__footer">
-                <p class="service-card__name">Nombre del servicio</p>
+                <p class="service-card__name">{{ service.name }}</p>
                 <button
                   type="button"
                   class="service-card__book-btn"
-                  :aria-label="`Agendar ${service.title}`"
-                  @click="openBooking(service.title)"
+                  :aria-label="`Agendar ${service.name}`"
+                  @click="openBooking(service.name)"
                 >
                   <svg
                     viewBox="0 0 24 24"
@@ -196,16 +291,16 @@ function scrollCarousel(serviceId: string, direction: "prev" | "next"): void {
           <button
             type="button"
             class="carousel__btn"
-            :aria-label="`Servicios anteriores de ${service.title}`"
-            @click="scrollCarousel(service.id, 'prev')"
+            :aria-label="`Servicios anteriores de ${category.title}`"
+            @click="scrollCarousel(category.id, 'prev')"
           >
             <span aria-hidden="true">‹</span>
           </button>
           <button
             type="button"
             class="carousel__btn"
-            :aria-label="`Siguientes servicios de ${service.title}`"
-            @click="scrollCarousel(service.id, 'next')"
+            :aria-label="`Siguientes servicios de ${category.title}`"
+            @click="scrollCarousel(category.id, 'next')"
           >
             <span aria-hidden="true">›</span>
           </button>
@@ -328,10 +423,10 @@ function scrollCarousel(serviceId: string, direction: "prev" | "next"): void {
 /* Hidden on small screens; shown only on large screens */
 .tab-panel__image {
   display: none;
+  width: 100%;
   border-radius: 1.25rem;
   aspect-ratio: 4 / 3;
-  background-color: var(--color-accent);
-  opacity: 0.4;
+  object-fit: cover;
 }
 
 @media (min-width: 60rem) {
@@ -416,8 +511,12 @@ function scrollCarousel(serviceId: string, direction: "prev" | "next"): void {
 }
 
 .service-card__image {
+  display: block;
+  width: 100%;
   aspect-ratio: 3 / 4;
+  object-fit: cover;
   background-color: var(--color-surface-muted);
+  /* Striped placeholder; only visible on the <div> fallback (no image). */
   background-image: repeating-linear-gradient(
     -45deg,
     transparent,

@@ -3,6 +3,20 @@
 A running log of progress and decisions for the beauty salon showcase site.
 Newest entries at the top. Each entry: what changed and why.
 
+## 2026-06-02 (services data + category images)
+
+- `ServicesSection.vue`: added a "Baby boomer" service to the "Manos y pies"
+  category (nail version, distinct from the hair colouring technique under
+  "Cabello"), using `/babyboomer.webp`.
+- Removed the four image-less services from "Manos y pies" (Retoque de acrílico,
+  Retiro de gel, Retiro de acrílico, Pedi express).
+- Wired up the per-category hero image: `tab-panel__image` is now a real `<img>`
+  bound to `category.image` with descriptive `alt` text, replacing the empty
+  placeholder `<div>`. CSS dropped the placeholder tint/opacity and added
+  `object-fit: cover` + `width: 100%` at the existing 4/3 aspect ratio. Added the
+  `image` field to `ServiceCategory` and the corresponding `*-main-image` assets
+  in `public/`.
+
 ## 2026-05-31 (Pinia state management + Próximas citas)
 
 - Installed `@pinia/nuxt` + `pinia`; registered module in `nuxt.config.ts`.

@@ -1,13 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
+import { storeToRefs } from "pinia";
 import { useBookingStore } from "~/stores/bookings";
-
-const props = defineProps<{
-  modelValue: boolean;
-  serviceName: string;
-}>();
-
-const emit = defineEmits<{ "update:modelValue": [value: boolean] }>();
 
 type Step = "date" | "time" | "confirm";
 
@@ -16,8 +10,9 @@ const selectedDate = ref<Date | null>(null);
 const selectedTime = ref<string>("");
 const dialogEl = ref<HTMLDialogElement | null>(null);
 const bookingStore = useBookingStore();
+const { isModalOpen, activeService } = storeToRefs(bookingStore);
 
-watch(() => props.modelValue, (open) => {
+watch(isModalOpen, (open) => {
   if (open) {
     step.value = "date";
     selectedDate.value = null;
@@ -29,7 +24,7 @@ watch(() => props.modelValue, (open) => {
 });
 
 function close(): void {
-  emit("update:modelValue", false);
+  bookingStore.closeModal();
 }
 
 function onDateSelect(date: Date): void {
@@ -41,7 +36,7 @@ function onTimeSelect(time: string): void {
   selectedTime.value = time;
   step.value = "confirm";
   if (selectedDate.value) {
-    bookingStore.add(props.serviceName, selectedDate.value, time);
+    bookingStore.add(activeService.value, selectedDate.value, time);
   }
   setTimeout(close, 2000);
 }
@@ -65,7 +60,7 @@ function onDialogClick(event: MouseEvent): void {
           <h2 id="booking-modal-title" class="booking-modal__title">
             {{ step === "confirm" ? "¡Cita agendada!" : "Agendar cita" }}
           </h2>
-          <p class="booking-modal__service">{{ serviceName }}</p>
+          <p class="booking-modal__service">{{ activeService }}</p>
         </div>
         <button
           type="button"

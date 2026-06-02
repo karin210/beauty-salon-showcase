@@ -3,6 +3,23 @@
 A running log of progress and decisions for the beauty salon showcase site.
 Newest entries at the top. Each entry: what changed and why.
 
+## 2026-06-02 (hero CTA opens booking modal)
+
+- Lifted the booking modal's UI state into the Pinia store (`stores/bookings.ts`):
+  added `isModalOpen`, `activeService`, and `openModal()` / `closeModal()` so any
+  component can open the modal for a given service.
+- `BookingModal.vue`: dropped the `modelValue` / `serviceName` props and the
+  `update:modelValue` emit; it now reads `isModalOpen` / `activeService` from the
+  store (via `storeToRefs`) and closes through `closeModal()`.
+- `HeroSection.vue`: the "Agendar cita" CTA is now a `<button>` that calls
+  `openModal('Cita general')` instead of an `<a href="#agendar">` placeholder.
+  Updated `.hero__cta` CSS (border reset, `cursor`, `font-family`) to keep the
+  button visually identical to the old anchor.
+- `ServicesSection.vue`: removed the local `bookingOpen` / `bookingService` refs
+  and the embedded modal; cards now call `bookingStore.openModal(service.name)`.
+- `index.vue`: mounts a single `<BookingModal />` at page level, shared by the
+  hero CTA and every service card.
+
 ## 2026-06-02 (services data + category images)
 
 - `ServicesSection.vue`: added a "Baby boomer" service to the "Manos y pies"

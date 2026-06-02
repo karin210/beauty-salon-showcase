@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useBookingStore } from "~/stores/bookings";
 
 interface Service {
   name: string;
@@ -126,13 +127,7 @@ const categories: ServiceCategory[] = [
 ];
 
 const activeId = ref(categories[0].id);
-const bookingOpen = ref(false);
-const bookingService = ref("");
-
-function openBooking(serviceName: string): void {
-  bookingService.value = serviceName;
-  bookingOpen.value = true;
-}
+const bookingStore = useBookingStore();
 
 // Plain arrays — only used for imperative DOM calls, no reactivity needed.
 const tabButtons: (HTMLButtonElement | null)[] = [];
@@ -265,7 +260,7 @@ function scrollCarousel(serviceId: string, direction: "prev" | "next"): void {
                   type="button"
                   class="service-card__book-btn"
                   :aria-label="`Agendar ${service.name}`"
-                  @click="openBooking(service.name)"
+                  @click="bookingStore.openModal(service.name)"
                 >
                   <svg
                     viewBox="0 0 24 24"
@@ -307,8 +302,6 @@ function scrollCarousel(serviceId: string, direction: "prev" | "next"): void {
         </div>
       </div>
     </div>
-
-    <BookingModal v-model="bookingOpen" :service-name="bookingService" />
   </section>
 </template>
 

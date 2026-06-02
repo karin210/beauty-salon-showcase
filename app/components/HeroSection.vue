@@ -1,6 +1,10 @@
 <script setup lang="ts">
+import { useBookingStore } from "~/stores/bookings";
+
 // Static showcase hero. Image lives in /public so it is served from the site root.
 const backgroundImage = "/hair-wash-1.jpg";
+
+const bookingStore = useBookingStore();
 </script>
 
 <template>
@@ -21,7 +25,13 @@ const backgroundImage = "/hair-wash-1.jpg";
       <p class="hero__subtitle">
         Cuidado experto del cabello en un espacio pensado para consentirte.
       </p>
-      <a class="hero__cta" href="#agendar">Agendar cita</a>
+      <button
+        type="button"
+        class="hero__cta"
+        @click="bookingStore.openModal('Cita general')"
+      >
+        Agendar cita
+      </button>
     </div>
   </section>
 </template>
@@ -87,10 +97,13 @@ const backgroundImage = "/hair-wash-1.jpg";
   padding: clamp(0.75rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2.5rem);
   background-color: var(--color-primary);
   color: var(--color-on-dark);
+  font-family: var(--font-body);
   font-size: clamp(1rem, 2vw, 1.15rem);
   font-weight: 600;
   text-decoration: none;
+  border: none;
   border-radius: 999px;
+  cursor: pointer;
   transition: background-color 0.2s ease, transform 0.2s ease;
 }
 

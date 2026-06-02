@@ -5,4 +5,5 @@
     <ServicesSection />
   </main>
   <SiteFooter />
+  <BookingModal />
 </template>

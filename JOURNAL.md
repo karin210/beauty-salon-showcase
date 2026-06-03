@@ -3,6 +3,14 @@
 A running log of progress and decisions for the beauty salon showcase site.
 Newest entries at the top. Each entry: what changed and why.
 
+## 2026-06-02 (header profile button to right edge)
+
+- `SiteHeader.vue`: removed the `max-width: 64rem` / `margin-inline: auto`
+  constraint on `.site-header__inner` and made it `width: 100%` so the header bar
+  spans the full viewport. The profile button now sits at the right edge (inset
+  only by the `--space-md` gutter) and the logo at the left edge, via the existing
+  `justify-content: space-between`.
+
 ## 2026-06-02 (hero CTA opens booking modal)
 
 - Lifted the booking modal's UI state into the Pinia store (`stores/bookings.ts`):

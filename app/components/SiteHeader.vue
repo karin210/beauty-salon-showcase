@@ -38,8 +38,7 @@
 }
 
 .site-header__inner {
-  max-width: 64rem;
-  margin-inline: auto;
+  width: 100%;
   padding: 0 var(--space-md);
   height: clamp(3.5rem, 8vw, 5rem);
   display: flex;

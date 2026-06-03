@@ -1,8 +1,25 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useBookingStore } from "~/stores/bookings";
 
 const bookingStore = useBookingStore();
+
+const lightboxDialog = ref<HTMLDialogElement | null>(null);
+const lightboxImage = ref<{ src: string; alt: string } | null>(null);
+
+function openLightbox(src: string, alt: string): void {
+  lightboxImage.value = { src, alt };
+  lightboxDialog.value?.showModal();
+}
+
+function closeLightbox(): void {
+  lightboxDialog.value?.close();
+  lightboxImage.value = null;
+}
+
+function onLightboxClick(event: MouseEvent): void {
+  if (event.target === lightboxDialog.value) closeLightbox();
+}
 
 const DAY_NAMES = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
 const MONTH_NAMES = [
@@ -28,6 +45,7 @@ interface ServiceEntry {
   name: string;
   date: string;
   dateTime: string;
+  image?: string;
 }
 
 interface Reminder {
@@ -53,10 +71,10 @@ const lastService: ServiceEntry = {
 };
 
 const styleHistory: ServiceEntry[] = [
-  { name: "Tinte completo + hidratación profunda", date: "3 de mayo de 2026", dateTime: "2026-05-03" },
-  { name: "Retoque de raíces", date: "15 de marzo de 2026", dateTime: "2026-03-15" },
-  { name: "Corte + tratamiento de keratina", date: "18 de enero de 2026", dateTime: "2026-01-18" },
-  { name: "Tinte completo + corte", date: "5 de noviembre de 2025", dateTime: "2025-11-05" },
+  { name: "Tinte completo + hidratación profunda", date: "3 de mayo de 2026", dateTime: "2026-05-03", image: "/tinte-completo.jpg" },
+  { name: "Retoque de raíces", date: "15 de marzo de 2026", dateTime: "2026-03-15", image: "/retoque-de-raiz.png" },
+  { name: "Corte + tratamiento de keratina", date: "18 de enero de 2026", dateTime: "2026-01-18", image: "/keratina-corte.png" },
+  { name: "Tinte completo + corte", date: "5 de noviembre de 2025", dateTime: "2025-11-05", image: "/corte-tinte.png" },
 ];
 
 const reminders: Reminder[] = [
@@ -165,8 +183,24 @@ const urgencyLabel: Record<Urgency, string> = {
             :key="index"
             class="history-list__item"
           >
-            <span class="history-list__name">{{ entry.name }}</span>
-            <time class="history-list__date" :datetime="entry.dateTime">{{ entry.date }}</time>
+            <button
+              v-if="entry.image"
+              type="button"
+              class="history-list__image-button"
+              :aria-label="`Ampliar imagen del servicio: ${entry.name}`"
+              @click="openLightbox(entry.image, `Resultado del servicio: ${entry.name}`)"
+            >
+              <img
+                class="history-list__image"
+                :src="entry.image"
+                :alt="`Resultado del servicio: ${entry.name}`"
+                loading="lazy"
+              />
+            </button>
+            <div class="history-list__details">
+              <span class="history-list__name">{{ entry.name }}</span>
+              <time class="history-list__date" :datetime="entry.dateTime">{{ entry.date }}</time>
+            </div>
           </li>
         </ol>
       </section>
@@ -198,8 +232,49 @@ const urgencyLabel: Record<Urgency, string> = {
 
     </div>
   </main>
+
+  <dialog
+    ref="lightboxDialog"
+    class="image-lightbox"
+    aria-label="Imagen ampliada del servicio"
+    @cancel.prevent="closeLightbox"
+    @click="onLightboxClick"
+  >
+    <div v-if="lightboxImage" class="image-lightbox__inner">
+      <button
+        type="button"
+        class="image-lightbox__close"
+        aria-label="Cerrar"
+        @click="closeLightbox"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+      <img class="image-lightbox__image" :src="lightboxImage.src" :alt="lightboxImage.alt" />
+    </div>
+  </dialog>
+
   <SiteFooter />
 </template>
+
+<!-- backdrop is in the top layer — scoped attributes don't reach it -->
+<style>
+dialog.image-lightbox::backdrop {
+  background-color: var(--color-overlay);
+  backdrop-filter: blur(3px);
+}
+</style>
 
 <style scoped>
 /* ==========================================
@@ -366,9 +441,8 @@ const urgencyLabel: Record<Urgency, string> = {
 .history-list__item {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-sm);
   padding-block: var(--space-sm);
   border-bottom: 1px solid var(--color-surface-muted);
 }
@@ -376,6 +450,45 @@ const urgencyLabel: Record<Urgency, string> = {
 .history-list__item:last-child {
   border-bottom: none;
   padding-bottom: 0;
+}
+
+.history-list__image-button {
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  line-height: 0;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.history-list__image-button:hover {
+  transform: scale(1.04);
+  box-shadow: 0 4px 14px rgba(43, 32, 36, 0.18);
+}
+
+.history-list__image-button:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.history-list__image {
+  width: clamp(3.5rem, 14vw, 5rem);
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  display: block;
+}
+
+.history-list__details {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .history-list__name {
@@ -540,5 +653,64 @@ const urgencyLabel: Record<Urgency, string> = {
   background-color: var(--color-surface);
   border-radius: 2em;
   padding: 0.15em 0.7em;
+}
+
+/* ==========================================
+   Image lightbox
+   ========================================== */
+
+.image-lightbox {
+  border: none;
+  padding: 0;
+  background: transparent;
+  max-width: 92vw;
+  max-height: 92vh;
+  overflow: visible;
+}
+
+.image-lightbox__inner {
+  position: relative;
+}
+
+.image-lightbox__image {
+  display: block;
+  max-width: 92vw;
+  max-height: 92vh;
+  width: auto;
+  height: auto;
+  border-radius: 0.75rem;
+  box-shadow: 0 8px 40px rgba(43, 32, 36, 0.4);
+}
+
+.image-lightbox__close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  box-shadow: 0 2px 8px rgba(43, 32, 36, 0.25);
+  transition: background-color 0.15s ease;
+}
+
+.image-lightbox__close svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.image-lightbox__close:hover {
+  background-color: var(--color-surface-muted);
+}
+
+.image-lightbox__close:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
 }
 </style>

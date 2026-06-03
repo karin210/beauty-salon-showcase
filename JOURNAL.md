@@ -3,6 +3,15 @@
 A running log of progress and decisions for the beauty salon showcase site.
 Newest entries at the top. Each entry: what changed and why.
 
+## 2026-06-03 (style history images + lightbox)
+
+- `profile.vue`: added a result photo to each style-history entry (`image` field on
+  `ServiceEntry`, mapped to the four `public/` assets). Each thumbnail is wrapped in
+  a focusable `<button>` that opens a native `<dialog>` lightbox showing the image at
+  full size. Lightbox follows the existing `BookingModal` pattern: `showModal()`,
+  backdrop-click and Escape to close, and an unscoped `::backdrop` block. Added
+  fluid CSS for the thumbnail, hover/focus states, and the lightbox.
+
 ## 2026-06-02 (header profile button to right edge)
 
 - `SiteHeader.vue`: removed the `max-width: 64rem` / `margin-inline: auto`

@@ -3,6 +3,13 @@
 A running log of progress and decisions for the beauty salon showcase site.
 Newest entries at the top. Each entry: what changed and why.
 
+## 2026-06-03 (lightbox caption)
+
+- `profile.vue`: the image lightbox now shows the service name as a caption below
+  the enlarged photo. Switched the container to a semantic `<figure>`/`<figcaption>`,
+  `openLightbox()` takes the name as a third arg, and the figure is a centered flex
+  column (image capped at `82vh` to leave room for the caption).
+
 ## 2026-06-03 (style history images + lightbox)
 
 - `profile.vue`: added a result photo to each style-history entry (`image` field on

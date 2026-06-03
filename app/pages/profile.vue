@@ -5,10 +5,10 @@ import { useBookingStore } from "~/stores/bookings";
 const bookingStore = useBookingStore();
 
 const lightboxDialog = ref<HTMLDialogElement | null>(null);
-const lightboxImage = ref<{ src: string; alt: string } | null>(null);
+const lightboxImage = ref<{ src: string; alt: string; caption: string } | null>(null);
 
-function openLightbox(src: string, alt: string): void {
-  lightboxImage.value = { src, alt };
+function openLightbox(src: string, alt: string, caption: string): void {
+  lightboxImage.value = { src, alt, caption };
   lightboxDialog.value?.showModal();
 }
 
@@ -188,7 +188,7 @@ const urgencyLabel: Record<Urgency, string> = {
               type="button"
               class="history-list__image-button"
               :aria-label="`Ampliar imagen del servicio: ${entry.name}`"
-              @click="openLightbox(entry.image, `Resultado del servicio: ${entry.name}`)"
+              @click="openLightbox(entry.image, `Resultado del servicio: ${entry.name}`, entry.name)"
             >
               <img
                 class="history-list__image"
@@ -240,7 +240,7 @@ const urgencyLabel: Record<Urgency, string> = {
     @cancel.prevent="closeLightbox"
     @click="onLightboxClick"
   >
-    <div v-if="lightboxImage" class="image-lightbox__inner">
+    <figure v-if="lightboxImage" class="image-lightbox__inner">
       <button
         type="button"
         class="image-lightbox__close"
@@ -262,7 +262,8 @@ const urgencyLabel: Record<Urgency, string> = {
         </svg>
       </button>
       <img class="image-lightbox__image" :src="lightboxImage.src" :alt="lightboxImage.alt" />
-    </div>
+      <figcaption class="image-lightbox__caption">{{ lightboxImage.caption }}</figcaption>
+    </figure>
   </dialog>
 
   <SiteFooter />
@@ -670,16 +671,30 @@ dialog.image-lightbox::backdrop {
 
 .image-lightbox__inner {
   position: relative;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
 }
 
 .image-lightbox__image {
   display: block;
   max-width: 92vw;
-  max-height: 92vh;
+  max-height: 82vh;
   width: auto;
   height: auto;
   border-radius: 0.75rem;
   box-shadow: 0 8px 40px rgba(43, 32, 36, 0.4);
+}
+
+.image-lightbox__caption {
+  font-family: var(--font-heading);
+  font-size: clamp(0.9rem, 2.4vw, 1.15rem);
+  color: var(--color-on-dark);
+  text-align: center;
+  margin: 0;
+  max-width: 92vw;
 }
 
 .image-lightbox__close {
